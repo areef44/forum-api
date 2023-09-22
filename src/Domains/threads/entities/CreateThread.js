@@ -18,7 +18,7 @@ class CreateThread {
             throw new Error('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
 
-        if(title.length > 255) {
+        if(title.length > 50) {
             throw new Error('CREATE_THREAD.TITLE_LIMIT_CHAR')
         }
     }
