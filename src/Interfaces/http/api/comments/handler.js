@@ -3,6 +3,7 @@ const CreateCommentUseCase = require("../../../../Applications/use_case/CreateCo
 class CommentHandler {
     constructor(container) {
         this._container = container;
+        this._postCommentHandler = this.postCommentHandler.bind(this);
     }
 
     async postCommentHandler(request, h) {
