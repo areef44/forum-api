@@ -17,7 +17,6 @@ describe('CreatedThread entities', () => {
         const payload = {
             id: 123,
             title: 'sebuah thread',
-            body: 'body sebuah thread',
             owner: false,
         };
 
@@ -30,7 +29,6 @@ describe('CreatedThread entities', () => {
         const payload = {
             id: 'thread-user1',
             title: 'sebuah thread',
-            body: 'sebuah body thread',
             owner: 'dicoding',
         }
 

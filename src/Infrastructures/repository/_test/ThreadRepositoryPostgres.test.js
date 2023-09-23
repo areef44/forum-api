@@ -42,7 +42,6 @@ describe ('thread Repository Postgres', () => {
                 expect(createdThread).toStrictEqual(new CreatedThread({
                     id: 'thread-h_sdadasd21321334',
                     title: 'sebuah thread',
-                    body: 'sebuah body thread',
                     owner: 'user-123456',
                 }));
                 expect(thread).toHaveLength(1);
