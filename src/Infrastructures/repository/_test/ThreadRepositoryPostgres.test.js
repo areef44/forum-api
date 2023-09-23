@@ -5,6 +5,7 @@ const CreateThread = require("../../../Domains/threads/entities/CreateThread");
 const CreatedThread = require("../../../Domains/threads/entities/CreatedThread");
 const pool = require("../../database/postgres/pool");
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
+const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
 
 describe ('thread Repository Postgres', () => {
@@ -21,6 +22,24 @@ describe ('thread Repository Postgres', () => {
 
         afterAll(async () => {
             await pool.end();
+        });
+
+        describe('verifyAvailableThread function', () => {
+            it('should throw InvariantError when thread not available', async () => {
+                await UsersTableTestHelper.addUser({id: 'user-12345678', username: 'arif'});
+                await ThreadTableTestHelper.createThread({ title: 'sebuah thread', owner: 'user-12345678' });
+                const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+                await expect(threadRepositoryPostgres.verifyAvailableThread('sebuah thread')).rejects.toThrowError(InvariantError);
+            });
+
+            it('should not throw InvariantError when thread available', async () => {
+                // Arrange
+                const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+                // Action & Assert
+                await expect(threadRepositoryPostgres.verifyAvailableThread('sebuah thread')).resolves.not.toThrowError(InvariantError);
+            });
         });
 
         describe('createThread function', () => {
