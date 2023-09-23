@@ -14,7 +14,7 @@ describe('CreateComment entities', () => {
         const payload = {
           thread: 'thread-h_12345',
           owner: 'userforum-12345',
-          content: false,
+          content: ['sebuah comment'],
         };
     
         expect(() => new CreateComment(payload)).toThrowError('CREATE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');

@@ -4,9 +4,9 @@ describe ('CreatedComment entities', () => {
     it('should throw error when payload did not contain needed property', () => {
         // Arrange
         const payload = {
-            content: 'sebuah comment',
-            owner: 'userforum-123',
-        }
+            id: 'comment-123',
+            content: 'Ini Komentar',
+        };
 
         // Action & Assert
         expect(() => new CreatedComment(payload)).toThrowError('CREATED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
@@ -16,8 +16,8 @@ describe ('CreatedComment entities', () => {
         // Arrange
         const payload = {
             id: 123,
-            content: 'sebuah comment',
-            owner: false,
+            content: ['hello world'],
+            owner: 'user-123',
         };
 
         // Action & Assert
