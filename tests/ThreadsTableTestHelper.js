@@ -8,10 +8,12 @@ const ThreadTableTestHelper = {
         body = 'sebuah body thread',
         owner = 'userforum-123',
     }) {
+        const createdAt = new Date().toISOString();
+        const updatedAt = createdAt;
         const query = {
             text:   `INSERT INTO threads
-                     VALUES ($1,$2,$3,$4)`,
-            values: [id,title,body, owner],
+                     VALUES ($1,$2,$3,$4,$5,$6)`,
+            values: [id,title,body, owner, createdAt, updatedAt],
         };
 
         await pool.query(query);
