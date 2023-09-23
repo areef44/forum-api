@@ -15,12 +15,12 @@ class ThreadsHandler {
             body: request.payload.body,
             owner,
         }
-        const createdThread = await createThreadUseCase.execute(useCasePayload);
+        const addedThread = await createThreadUseCase.execute(useCasePayload);
         
         const response = h.response({
             status: 'success',
             data: {
-                createdThread,
+                addedThread,
             },
         });
         response.code(201);

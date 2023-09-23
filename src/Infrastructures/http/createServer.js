@@ -29,7 +29,7 @@ const createServer = async (container) => {
         validate: (artifacts) => ({
             isValid: true,
             credentials: {
-                id: artifacts.decodec.payload.id
+                id: artifacts.decoded.payload.id
             },
         }),
     });
