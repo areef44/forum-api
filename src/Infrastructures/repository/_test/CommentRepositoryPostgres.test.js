@@ -9,15 +9,12 @@ const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('CommentRepositoryPostgres', () => {
-    it('should be instance of ThreadRepository domain', () => {
-        const commentRepositoryPostgres = new CommentRepositoryPostgres({}, {}); // Dummy dependency
-    
-        expect(commentRepositoryPostgres).toBeInstanceOf(CommentRepositoryPostgres);
-    });
 
     describe('behavior test', () => {
         afterEach(async () => {
             await CommentsTableTestHelper.cleanTable();
+            await ThreadsTableTestHelper.cleanTable();
+            await UsersTableTestHelper.cleanTable();
         });
 
         afterAll(async () => {
@@ -55,16 +52,19 @@ describe('CommentRepositoryPostgres', () => {
             it('should throw NotFoundError when comment not available', async () => {
                 // Arrange
                 const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-                const comment = 'xxx';
+                const comment = 'halo gaes';
 
                 // Action & Assert
                 await expect(commentRepositoryPostgres.checkAvailabilityComment(comment)).rejects.toThrow(NotFoundError);
             });
 
-            it('should not throw NotFoundError if comment available', async () => {
+            it('should not throw NotFoundError when comment available', async () => {
                 // Arrange
                 const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-                await UsersTableTestHelper.addUser({id: 'user-987654321', username: 'areef44'});
+                await UsersTableTestHelper.addUser({
+                    id: 'user-987654321', 
+                    username: 'areef44',
+                });
                 await ThreadsTableTestHelper.createThread({ id: 'thread-h_654321', body: 'sebuah thread', owner: 'user-987654321'});
 
                 await CommentsTableTestHelper.createComment({
@@ -79,29 +79,21 @@ describe('CommentRepositoryPostgres', () => {
         describe('verifyCommentOwner function', () => {
             it('should throw AuthorizationError when comment not belong to owner', async () => {
                 // Arrange
-                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool,{});
-                await UsersTableTestHelper.addUser({ id: 'user-999999999', username: 'areef43' });
-                await UsersTableTestHelper.addUser({ id: 'user-999999999', username: 'areef42' });
-                await ThreadsTableTestHelper.createThread({ 
-                    id: 'thread-h_654321', 
-                    body: 'sebuah thread', 
-                    owner: 'user-999999999' });
-                await CommentsTableTestHelper.createComment({
-                    id: 'comment-_pby2-654321',
-                    content: 'sebuah comment',
-                    thread: 'thread-h_654321',
-                    owner: 'user-999999999',
-                });
-                const comment = 'comment-_pby2-654321';
-                const owner = 'user-999999999';
+                const comment = 'comment-123';
+                const owner = 'user-123';
+                const wrongUser= 'user-456';
+                await UsersTableTestHelper.addUser({ id: owner }); // add user with id user-123
+                await ThreadsTableTestHelper.createThread({ id: 'thread-123' }); // add thread with id thread-123
+                await CommentsTableTestHelper.createComment({ id: comment });
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
                 // Action & Assert
-                await expect(commentRepositoryPostgres.verifyCommentOwner(comment, owner)).rejects.toThrow(AuthorizationError);
+                expect(commentRepositoryPostgres.verifyCommentOwner(comment, wrongUser)).rejects.toThrowError(AuthorizationError);
             });
 
             it('should not throw AuthorizationError if comment is belongs to owner', async () => {
                 // Arrange
-                const CommentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
                 await UsersTableTestHelper.addUser({ 
                     id: 'user-99999999', 
                     username: 'areef45' 
