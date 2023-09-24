@@ -24,6 +24,10 @@ exports.up = (pgm) => {
             onDelete: 'cascade',
             onUpdate: 'cascade',
         },
+        is_deleted: {
+            type: 'INTEGER',
+            notNull: true,
+        },
         created_at: {
             type: 'TEXT',
             notNull: true,
