@@ -5,6 +5,8 @@ const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelp
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CreatedComment = require("../../../Domains/comments/entities/CreatedComment");
+const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('CommentRepositoryPostgres', () => {
     it('should be instance of ThreadRepository domain', () => {
@@ -46,6 +48,106 @@ describe('CommentRepositoryPostgres', () => {
                     owner: 'user-9876543210',
                 }));
                 expect(comment).toHaveLength(1);
+            });
+        });
+
+        describe('checkAvailabilityComment function', () => {
+            it('should throw NotFoundError when comment not available', async () => {
+                // Arrange
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                const comment = 'xxx';
+
+                // Action & Assert
+                await expect(commentRepositoryPostgres.checkAvailabilityComment(comment)).rejects.toThrow(NotFoundError);
+            });
+
+            it('should not throw NotFoundError if comment available', async () => {
+                // Arrange
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                await UsersTableTestHelper.addUser({id: 'user-987654321', username: 'areef44'});
+                await ThreadsTableTestHelper.createThread({ id: 'thread-h_654321', body: 'sebuah thread', owner: 'user-987654321'});
+
+                await CommentsTableTestHelper.createComment({
+                    id: 'comment-_pby2-654321', content: 'sebuah comment', thread: 'thread-h_654321', owner: 'user-987654321',
+                });
+
+                // Action & Assert
+                await expect(commentRepositoryPostgres.checkAvailabilityComment('comment-_pby2-654321')).resolves.not.toThrow(NotFoundError);
+            });
+        });
+
+        describe('verifyCommentOwner function', () => {
+            it('should throw AuthorizationError when comment not belong to owner', async () => {
+                // Arrange
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool,{});
+                await UsersTableTestHelper.addUser({ id: 'user-999999999', username: 'areef43' });
+                await UsersTableTestHelper.addUser({ id: 'user-999999999', username: 'areef42' });
+                await ThreadsTableTestHelper.createThread({ 
+                    id: 'thread-h_654321', 
+                    body: 'sebuah thread', 
+                    owner: 'user-999999999' });
+                await CommentsTableTestHelper.createComment({
+                    id: 'comment-_pby2-654321',
+                    content: 'sebuah comment',
+                    thread: 'thread-h_654321',
+                    owner: 'user-999999999',
+                });
+                const comment = 'comment-_pby2-654321';
+                const owner = 'user-999999999';
+
+                // Action & Assert
+                await expect(commentRepositoryPostgres.verifyCommentOwner(comment, owner)).rejects.toThrow(AuthorizationError);
+            });
+
+            it('should not throw AuthorizationError if comment is belongs to owner', async () => {
+                // Arrange
+                const CommentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                await UsersTableTestHelper.addUser({ 
+                    id: 'user-99999999', 
+                    username: 'areef45' 
+                });
+                await ThreadsTableTestHelper.createThread({ 
+                    id: 'thread-h_654321', 
+                    body: 'sebuah thread', 
+                    owner: 'user-99999999' 
+                });
+                await CommentsTableTestHelper.createComment({
+                    id: 'comment-_pby2-654321', 
+                    content: 'sebuah comment', 
+                    thread: 'thread-h_654321', 
+                    owner: 'user-99999999',
+                });
+
+                // Action & Assert
+                await expect(commentRepositoryPostgres.verifyCommentOwner('comment-_pby2-654321', 'user-99999999')).resolves.not.toThrow(AuthorizationError);
+            });
+        });
+
+        describe('deleteToken', () => {
+            it('should delete token from database', async () => {
+                // Arrange
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                await UsersTableTestHelper.addUser({ 
+                    id: 'user-88888888', 
+                    username: 'areef46' 
+                });
+                await ThreadsTableTestHelper.createThread({ 
+                    id: 'thread-h_654321', 
+                    body: 'sebuah thread', 
+                    owner: 'user-88888888' });
+                await CommentsTableTestHelper.createComment({
+                    id: 'comment-_pby2-654321', 
+                    content: 'sebuah comment', 
+                    thread: 'thread-h_654321', 
+                    owner: 'user-88888888',
+                });
+
+                // Action
+                await commentRepositoryPostgres.deleteComment('comment-_pby2-654321');
+
+                // Assert
+                const comment = await CommentsTableTestHelper.findCommentsById('comment-_pby2-654321');
+                expect(comment).toHaveLength(0);
             });
         });
     });
