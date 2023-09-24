@@ -7,13 +7,14 @@ const CommentsTableTestHelper = {
         content = 'sebuah comment',
         thread = 'thread-123',
         owner = 'user-123',
+        is_deleted = 0,
     }) {
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;
         const query = {
             text: `INSERT INTO comments
-                   VALUES($1, $2, $3, $4, $5, $6)`,
-            values: [id, thread, content, owner, createdAt, updatedAt],
+                   VALUES($1, $2, $3, $4, $5, $6, $7)`,
+            values: [id, thread, content, owner, is_deleted, createdAt, updatedAt],
         };
 
         await pool.query(query);
@@ -28,6 +29,19 @@ const CommentsTableTestHelper = {
 
         const result = await pool.query(query);
         return result.rows;
+    },
+
+    async checkIsDeletedCommentsById(id) {
+        const query = {
+            text: `SELECT is_deleted
+                   FROM comments
+                   WHERE id = $1`,
+            values: [id],
+        };
+
+        const result = await pool.query(query);
+        const isDeleted = result.rows[0].is_deleted;
+        return isDeleted;
     },
 
     async cleanTable() {

@@ -115,8 +115,8 @@ describe('CommentRepositoryPostgres', () => {
             });
         });
 
-        describe('deleteToken', () => {
-            it('should delete token from database', async () => {
+        describe('deleteComment', () => {
+            it('should delete comment from database', async () => {
                 // Arrange
                 const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
                 await UsersTableTestHelper.addUser({ 
@@ -138,8 +138,8 @@ describe('CommentRepositoryPostgres', () => {
                 await commentRepositoryPostgres.deleteComment('comment-_pby2-654321');
 
                 // Assert
-                const comment = await CommentsTableTestHelper.findCommentsById('comment-_pby2-654321');
-                expect(comment).toHaveLength(0);
+                const comment = await CommentsTableTestHelper.checkIsDeletedCommentsById('comment-_pby2-654321');
+                expect(comment).toEqual(1);
             });
         });
     });

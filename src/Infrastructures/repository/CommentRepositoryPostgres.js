@@ -18,7 +18,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
         const query = {
             text: `INSERT INTO comments
-                   VALUES($1, $2, $3, $4, $5, $6)
+                   VALUES($1, $2, $3, $4, 0, $5, $6)
                    RETURNING id, content, owner`,
             values: [id, thread, content, owner, createdAt, updatedAt],
         };
@@ -59,7 +59,8 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     async deleteComment(comment) {
         const query = {
-            text:  `DELETE FROM comments
+            text:  `UPDATE comments
+                    SET is_deleted=1
                     WHERE id = $1`,
             values: [comment],
         };
