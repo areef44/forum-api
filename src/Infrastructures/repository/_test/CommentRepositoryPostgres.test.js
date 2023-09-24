@@ -142,5 +142,36 @@ describe('CommentRepositoryPostgres', () => {
                 expect(comment).toEqual(1);
             });
         });
+
+        describe('get comment threads', () => {
+            it('should get comments of thread', async () => {
+                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+                const userPayload = { id: 'user-123456', username: 'areef44' };
+                const threadPayload = {
+                id: 'thread-h_123456',
+                title: 'sebuah thread',
+                body: 'sebuah body thread',
+                owner: 'user-123456',
+                };
+                const commentPayload = {
+                id: 'comment-_pby2-123456',
+                content: 'sebuah comment',
+                thread: threadPayload.id,
+                owner: userPayload.id,
+                };
+
+                await UsersTableTestHelper.addUser(userPayload);
+                await ThreadsTableTestHelper.createThread(threadPayload);
+                await CommentsTableTestHelper.createComment(commentPayload);
+                await CommentsTableTestHelper.deleteComment(commentPayload.id);
+
+                const comments = await commentRepositoryPostgres.getCommentsThread(threadPayload.id);
+
+                expect(Array.isArray(comments)).toBe(true);
+                expect(comments[0].id).toEqual(commentPayload.id);
+                expect(comments[0].username).toEqual(userPayload.username);
+                expect(comments[0].content).toEqual('comment has been deleted');
+            });
+        });
     });
 });
