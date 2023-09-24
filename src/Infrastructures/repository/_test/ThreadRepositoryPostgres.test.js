@@ -18,6 +18,7 @@ describe ('thread Repository Postgres', () => {
     describe('behavior test', () => {
         afterEach(async () => {
             await ThreadTableTestHelper.cleanTable();
+            await UsersTableTestHelper.cleanTable();
         });
 
         afterAll(async () => {
@@ -68,6 +69,28 @@ describe ('thread Repository Postgres', () => {
 
                 // Action & Assert
                 await expect(threadRepositoryPostgres.checkAvailabilityThread('thread-h_123')).resolves.not.toThrowError(NotFoundError);
+            });
+        });
+
+        describe('getDetailThread function', () => {
+            it('should get detail thread', async () => {
+              const threadRepository = new ThreadRepositoryPostgres(pool, {});
+              const userPayload = { id: 'user-123456', username: 'areef44' };
+              const threadPayload = {
+                id: 'thread-h_123456',
+                title: 'sebuah thread',
+                body: 'sebuah body thread',
+                owner: 'user-123456',
+              };
+              await UsersTableTestHelper.addUser(userPayload);
+              await ThreadTableTestHelper.createThread(threadPayload);
+      
+              const detailThread = await threadRepository.getDetailThread(threadPayload.id);
+      
+              expect(detailThread.id).toEqual(threadPayload.id);
+              expect(detailThread.title).toEqual(threadPayload.title);
+              expect(detailThread.body).toEqual(threadPayload.body);
+              expect(detailThread.username).toEqual(userPayload.username);
             });
         });
     });
