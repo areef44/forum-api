@@ -3,10 +3,10 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadTableTestHelper = {
     async createThread({
-        id = 'thread-h_123',
+        id = 'thread-123',
         title = 'sebuah thread',
         body = 'sebuah body thread',
-        owner = 'userforum-123',
+        owner = 'user-123',
     }) {
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;

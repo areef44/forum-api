@@ -3,10 +3,10 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const CommentsTableTestHelper = {
     async createComment({
-        id = 'comment-_userforum12345',
+        id = 'comment-_pby2-123',
         content = 'sebuah comment',
-        thread = 'thread-12345',
-        owner = 'user-12345',
+        thread = 'thread-123',
+        owner = 'user-123',
     }) {
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;
