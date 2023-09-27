@@ -16,8 +16,8 @@ describe('CreatedThread entities', () => {
         // Arrange
         const payload = {
             id: 123,
-            title: 'sebuah thread',
-            owner: false,
+            title: {},
+            owner: 'user-12345',
         };
 
         // Action & Assert

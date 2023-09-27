@@ -36,14 +36,14 @@ describe ('thread Repository Postgres', () => {
                     owner: 'user-123456',
                 });
 
-                const fakeIdGenerator = () => 'abcdef123456';
+                const fakeIdGenerator = () => '123456abcdef';
                 const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
                 const createdThread = await threadRepositoryPostgres.createThread(newThread);
 
-                const thread = await ThreadTableTestHelper.findThreadsById('thread-h_abcdef123456');
+                const thread = await ThreadTableTestHelper.findThreadsById('thread-h_123456abcdef');
                 expect(createdThread).toStrictEqual(new CreatedThread({
-                    id: 'thread-h_abcdef123456',
+                    id: 'thread-h_123456abcdef',
                     title: 'sebuah thread',
                     owner: 'user-123456',
                 }));

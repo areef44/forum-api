@@ -9,7 +9,10 @@ class CreateThread {
         this.owner = owner;
     }
 
-    _verifypayload({ title, body, owner }) {
+    _verifypayload(payload) {
+
+        const { title, body, owner } = payload;
+
         if(!title || !body || !owner){
             throw new Error('CREATE_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
         }

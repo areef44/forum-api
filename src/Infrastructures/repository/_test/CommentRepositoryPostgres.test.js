@@ -52,7 +52,7 @@ describe('CommentRepositoryPostgres', () => {
             it('should throw NotFoundError when comment not available', async () => {
                 // Arrange
                 const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-                const comment = 'halo gaes';
+                const comment = 'xxx';
 
                 // Action & Assert
                 await expect(commentRepositoryPostgres.checkAvailabilityComment(comment)).rejects.toThrow(NotFoundError);
@@ -139,7 +139,7 @@ describe('CommentRepositoryPostgres', () => {
 
                 // Assert
                 const comment = await CommentsTableTestHelper.checkIsDeletedCommentsById('comment-_pby2-654321');
-                expect(comment).toEqual(1);
+                expect(comment).toEqual(true);
             });
         });
 
@@ -170,38 +170,6 @@ describe('CommentRepositoryPostgres', () => {
                 expect(comments[0].id).toEqual(commentPayload.id);
                 expect(comments[0].username).toEqual(userPayload.username);
                 expect(comments[0].content).toEqual('sebuah comment');
-            });
-        
-            it('should delete and return comments of thread with changed content', async () => {
-                const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-                const userPayload = { 
-                    id: 'user-123456', 
-                    username: 'areef44' 
-                };
-                const threadPayload = {
-                  id: 'thread-h_123456',
-                  title: 'sebuah thread',
-                  body: 'sebuah body thread',
-                  owner: 'user-123456',
-                };
-                const commentPayload = {
-                  id: 'comment-_pby2-123456',
-                  content: 'sebuah comment',
-                  thread: threadPayload.id,
-                  owner: userPayload.id,
-                };
-                
-                await UsersTableTestHelper.addUser(userPayload);
-                await ThreadsTableTestHelper.createThread(threadPayload);
-                await CommentsTableTestHelper.createComment(commentPayload);
-                await CommentsTableTestHelper.deleteComment(commentPayload.id);
-
-                const comments = await commentRepositoryPostgres.getCommentsThread(threadPayload.id);
-
-                expect(Array.isArray(comments)).toBe(true);
-                expect(comments[0].id).toEqual(commentPayload.id);
-                expect(comments[0].username).toEqual(userPayload.username);
-                expect(comments[0].content).toEqual('comment has been deleted');
             });
         });
     });

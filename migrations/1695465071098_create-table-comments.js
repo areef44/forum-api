@@ -9,9 +9,6 @@ exports.up = (pgm) => {
         thread: {
             type: 'VARCHAR(50)',
             notNull: true,
-            references: '"threads"',
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
         },
         content: {
             type: 'TEXT',
@@ -20,13 +17,11 @@ exports.up = (pgm) => {
         owner: {
             type: 'VARCHAR(50)',
             notNull: true,
-            references: '"users"',
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
         },
         is_deleted: {
-            type: 'INTEGER',
+            type: 'BOOLEAN',
             notNull: true,
+            defaultValue: false,
         },
         created_at: {
             type: 'TEXT',
@@ -36,10 +31,11 @@ exports.up = (pgm) => {
             type: 'TEXT',
             notNull: true,
         }
-    })
+    });
+    pgm.addConstraint('comments', 'fk_comments.thread_threads.id', 'FOREIGN KEY(thread) REFERENCES threads(id) ON DELETE CASCADE');
+    pgm.addConstraint('comments', 'fk_comments.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');
 };
 
-exports.down = (pgm) => {
-    pgm.dropTable('comments');
-};
+
+exports.down = (pgm) => {};
 

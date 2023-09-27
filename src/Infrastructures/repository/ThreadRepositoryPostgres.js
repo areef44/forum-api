@@ -21,7 +21,8 @@ class ThreadRepositoryPostgres extends ThreadRepository {
                    RETURNING id, title, owner`,
             values: [id, title, body, owner, createdAt, updatedAt],
         };
-
+        
+        
         const result = await this._pool.query(query);
 
         return new CreatedThread({...result.rows[0]});
@@ -35,10 +36,10 @@ class ThreadRepositoryPostgres extends ThreadRepository {
         };
 
         const result = await this._pool.query(query);
-
-        if (result.rows.length === 0){
-            throw new NotFoundError('thread tidak ditemukan');
-        }
+        
+		if (result.rows.length === 0) {
+			throw new NotFoundError(`thread tidak ditemukan`);
+		}
     }
 
     async getDetailThread(threadId) {

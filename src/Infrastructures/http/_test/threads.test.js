@@ -1,5 +1,6 @@
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
 const createServer = require('../createServer');
@@ -16,7 +17,7 @@ describe('POST /threads endpoint', () => {
     });
 
     describe('when POST /threads', () => {
-        it('should response 401 when payload dont have access token', async () => {
+        it('should response 400 when payload dont have access token', async () => {
             // Arrange
             const server = await createServer(container);
             // Action
@@ -39,7 +40,6 @@ describe('POST /threads endpoint', () => {
                 username: 'areef44',
                 password: 'secret',
             };
-
             const server = await createServer(container);
 
             await server.inject({
@@ -125,6 +125,7 @@ describe('POST /threads endpoint', () => {
                 password: 'secret',
             };
 
+            
             const server = await createServer(container);
 
             await server.inject({

@@ -14,18 +14,18 @@ class CommentRepositoryPostgres extends CommentRepository {
         const { content, thread, owner } = newComment;
         const id = `comment-_pby2_${this._idGenerator()}`;
         const createdAt = new Date().toISOString();
-        const updatedAt = createdAt;
 
         const query = {
             text: `INSERT INTO comments
-                   VALUES($1, $2, $3, $4, 0, $5, $6)
+                   VALUES($1, $2, $3, $4, FALSE, $5, $5)
                    RETURNING id, content, owner`,
-            values: [id, thread, content, owner, createdAt, updatedAt],
+            values: [id, thread, content, owner, createdAt],
         };
+
 
         const result = await this._pool.query(query);
 
-        return new CreatedComment({ ...result.rows[0] });
+        return new CreatedComment(result.rows[0]);
     }
 
     async checkAvailabilityComment(comment) {
@@ -38,7 +38,7 @@ class CommentRepositoryPostgres extends CommentRepository {
         const result = await this._pool.query(query);
 
         if(result.rows.length === 0) {
-            throw new NotFoundError('Comment has not found');
+            throw new NotFoundError('komentar tidak ditemukan di database');
         }
     }
 
@@ -53,14 +53,14 @@ class CommentRepositoryPostgres extends CommentRepository {
         const result = await this._pool.query(query);
 
         if(result.rows.length === 0) {
-            throw new AuthorizationError('Sorry, You Cant delete this comment');
+            throw new AuthorizationError('anda tidak bisa menghapus komentar orang lain.');
         }
     }
 
     async deleteComment(comment) {
         const query = {
             text:  `UPDATE comments
-                    SET is_deleted=1
+                    SET is_deleted=TRUE
                     WHERE id = $1`,
             values: [comment],
         };
@@ -70,11 +70,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     async getCommentsThread(thread) {
         const query = {
-            text: `SELECT c.id, u.username, c.created_at as date, c.content, c.is_deleted  
-                   FROM comments c
-                   LEFT JOIN users u ON u.id = c.owner
-                   WHERE thread = $1
-                   ORDER BY c.created_at ASC`,
+            text: `SELECT comments.id, users.username, comments.created_at as date, comments.content, comments.is_deleted FROM comments LEFT JOIN users ON users.id = comments.owner WHERE thread = $1 ORDER BY comments.created_at ASC`,
             values: [thread],
         };
 

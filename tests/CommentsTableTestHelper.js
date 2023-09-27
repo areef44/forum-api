@@ -3,22 +3,17 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const CommentsTableTestHelper = {
     async createComment({
-        id = 'comment-_pby2-123',
-        content = 'sebuah comment',
-        thread = 'thread-123',
-        owner = 'user-123',
-        is_deleted = 0,
-    }) {
+        id = 'comment-_pby2-123', content = 'sebuah komentar', thread = 'thread-123', owner = 'user-123', isDeleted = 0,
+      }) {
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;
         const query = {
-            text: `INSERT INTO comments
-                   VALUES($1, $2, $3, $4, $5, $6, $7)`,
-            values: [id, thread, content, owner, is_deleted, createdAt, updatedAt],
+          text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6, $7)',
+          values: [id, thread, content, owner, isDeleted, createdAt, updatedAt],
         };
-
+    
         await pool.query(query);
-    },
+      },
 
     async findCommentsById(id) {
         const query = {
@@ -44,17 +39,18 @@ const CommentsTableTestHelper = {
         return isDeleted;
     },
 
+    
+    async deleteComment(id) {
+      const query = {
+        text: 'UPDATE comments SET is_deleted = 1 WHERE id = $1',
+        values: [id],
+      };
+      await pool.query(query);
+    },
+    
     async cleanTable() {
         await pool.query('DELETE FROM comments WHERE 1=1');
     },
-
-    async deleteComment(id) {
-        const query = {
-          text: 'UPDATE comments SET is_deleted = 1 WHERE id = $1',
-          values: [id],
-        };
-        await pool.query(query);
-    },
-};
+  };
 
 module.exports = CommentsTableTestHelper;
