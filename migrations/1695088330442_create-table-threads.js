@@ -17,9 +17,6 @@ exports.up = (pgm) => {
         owner: {
             type: 'VARCHAR(50)',
             notNull: true,
-            references: '"users"',
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
         },
         created_at: {
             type: 'TEXT',
@@ -30,8 +27,11 @@ exports.up = (pgm) => {
             notNull: true,
         }
     });
+
+    pgm.addConstraint('threads', 'fk_threads.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');
 };
 
 exports.down = (pgm) => {
+    pgm.dropConstraint('threads', 'fk_threads.owner_users.id');
     pgm.dropTable('threads');
 };

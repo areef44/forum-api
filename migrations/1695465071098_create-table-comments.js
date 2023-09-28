@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 exports.up = (pgm) => {
-    pgm.createTable('comments',{
+    pgm.createTable('comments', {
         id: {
             type: 'VARCHAR(50)',
             primaryKey: true,
@@ -21,7 +21,7 @@ exports.up = (pgm) => {
         is_deleted: {
             type: 'BOOLEAN',
             notNull: true,
-            defaultValue: false,
+            default: false, // Mengganti 'defaultValue' menjadi 'default'
         },
         created_at: {
             type: 'TEXT',
@@ -32,10 +32,15 @@ exports.up = (pgm) => {
             notNull: true,
         }
     });
-    pgm.addConstraint('comments', 'fk_comments.thread_threads.id', 'FOREIGN KEY(thread) REFERENCES threads(id) ON DELETE CASCADE');
-    pgm.addConstraint('comments', 'fk_comments.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');
+
+    // Mengganti nama constraint yang salah
+    pgm.addConstraint('comments', 'fk_comments_thread', 'FOREIGN KEY(thread) REFERENCES threads(id) ON DELETE CASCADE');
+    pgm.addConstraint('comments', 'fk_comments_owner', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');
 };
 
-
-exports.down = (pgm) => {};
-
+exports.down = (pgm) => {
+    // Mengganti nama constraint yang salah
+    pgm.dropConstraint('comments', 'fk_comments_owner');
+    pgm.dropConstraint('comments', 'fk_comments_thread');
+    pgm.dropTable('comments');
+};
