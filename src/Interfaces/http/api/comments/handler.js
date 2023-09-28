@@ -4,8 +4,8 @@ const DeleteCommentUseCase = require('../../../../Applications/use_case/DeleteCo
 class CommentHandler {
     constructor(container) {
         this._container = container;
-        this._postCommentHandler = this.postCommentHandler.bind(this);
-        this._deleteCommentHandler = this.deleteCommentHandler.bind(this);
+        this.postCommentHandler = this.postCommentHandler.bind(this);
+        this.deleteCommentHandler = this.deleteCommentHandler.bind(this);
     }
 
     async postCommentHandler(request, h) {
