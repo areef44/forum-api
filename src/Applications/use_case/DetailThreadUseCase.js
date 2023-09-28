@@ -13,13 +13,14 @@ class DetailThreadUseCase {
         const detailThread = await this._threadRepository.getDetailThread(thread);
         const getCommentsThread = await this._commentRepository.getCommentsThread(thread);
         const commentPayload = {
-            comments: getCommentsThread == undefined ? [] : getCommentsThread,
+            comments: getCommentsThread,
         };
-        const { comments } = new DetailComment(commentPayload);
-        return {
-            thread: detailThread,
-            comments,
-        }
+        const resultComments = new DetailComment(commentPayload);
+        detailThread.comments = resultComments.comments;
+        const result = {
+            thread: detailThread
+        };
+        return result;
     }
 }
 module.exports = DetailThreadUseCase;
