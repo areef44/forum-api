@@ -12,15 +12,11 @@ class DetailThreadUseCase {
         await this._threadRepository.checkAvailabilityThread(thread);
         const detailThread = await this._threadRepository.getDetailThread(thread);
         const getCommentsThread = await this._commentRepository.getCommentsThread(thread);
-        const commentPayload = {
-            comments: getCommentsThread,
+
+        detailThread.comments = new DetailComment({comments: getCommentsThread}).comments;
+        return {
+            thread: detailThread,
         };
-        const resultComments = new DetailComment(commentPayload);
-        detailThread.comments = resultComments.comments;
-        const result = {
-            thread: detailThread
-        };
-        return result;
     }
 }
 module.exports = DetailThreadUseCase;

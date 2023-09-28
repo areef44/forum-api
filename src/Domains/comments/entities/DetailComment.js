@@ -16,20 +16,13 @@ class DetailComment {
     }
 
     _mapComment({ comments }){
-        const result = [];
-        comments.forEach((data) => {
-            const comment = {
-                id: data.id,
-                username: data.username,
-                date: data.date,
-                content: data.content
-            };
-            if (data.is_deleted > 0) {
-                comment.content = '**komentar telah dihapus**';
-            }
-            result.push(comment);
-        });
-        return result;
+        
+        return comments.map((comment) => ({
+            id: comment.id,
+            username: comment.username,
+            date: comment.date,
+            content: comment.is_deleted ? '**komentar telah dihapus**' : comment.content,
+        }));
     }
 }
 

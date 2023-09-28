@@ -113,7 +113,7 @@ describe('UserRepositoryPostgres', () => {
                 const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
                 // Action & Assert
-                await expect(userRepositoryPostgres.getIdByUsername('dicoding')).rejects.toThrowError(InvariantError);
+                await expect(userRepositoryPostgres.getPasswordByUsername('dicoding')).rejects.toThrowError(InvariantError);
             });
 
             it('should return password correctly', async () => {
