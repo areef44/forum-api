@@ -84,7 +84,7 @@ class CommentRepositoryPostgres extends CommentRepository {
                 content: data.content
             };
             if (data.is_deleted > 0) {
-                comment.content = 'comment has been deleted';
+                comment.content = '**komentar telah dihapus**';
             }
             result.push(comment);
         });
