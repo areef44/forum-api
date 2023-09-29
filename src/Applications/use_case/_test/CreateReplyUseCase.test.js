@@ -14,7 +14,7 @@ describe('CreateReplyUseCase', () => {
     const useCasePayload = {
       content: 'New Reply',
       owner: 'user-123',
-      comment: 'comment-123',
+      commentId: 'comment-123',
     };
     const expectedCreatedReply = new CreatedReply({
         id: 'reply-123',
@@ -47,11 +47,11 @@ describe('CreateReplyUseCase', () => {
 
     // Assert
     expect(createdReply).toStrictEqual(expectedCreatedReply);
-    expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.comment);
+    expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.commentId);
     expect(mockReplyRepository.createReply).toBeCalledWith(new CreateReply({
       content: useCasePayload.content,
       owner: useCasePayload.owner,
-      comment: useCasePayload.comment,
+      commentId: useCasePayload.commentId,
     }));
   });
 });

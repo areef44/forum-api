@@ -16,7 +16,7 @@ describe('CreateReply entities', () => {
     const payload = {
       content: 12345,
       owner:  { id: 'user-123'},
-      comment: 'comment-123',
+      commentId: 'comment-123',
     };
 
     // Action & Assert
@@ -28,7 +28,7 @@ describe('CreateReply entities', () => {
     const payload = {
       content: 'New Reply',
       owner: 'user-123',
-      comment: 'comment-123',
+      commentId: 'comment-123',
     };
 
     // Action
@@ -38,6 +38,6 @@ describe('CreateReply entities', () => {
     expect(createReply).toBeInstanceOf(CreateReply);
     expect(createReply.content).toEqual(payload.content);
     expect(createReply.owner).toEqual(payload.owner);
-    expect(createReply.comment).toEqual(payload.comment);
+    expect(createReply.commentId).toEqual(payload.commentId);
   });
 });

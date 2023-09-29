@@ -9,15 +9,15 @@ class ReplyRepositoryPostgres extends ReplyRepository {
   }
 
   async createReply(newReply) {
-    const { content, owner, comment } = newReply;
+    const { content, owner, commentId } = newReply;
     const id = `reply-${this._idGenerator()}`;
     const createdAt = new Date().toISOString();
  
     const query = {
       text: `INSERT INTO replies(id, content, owner, comment_id, is_delete, created_at, updated_at) 
              VALUES($1, $2, $3, $4, FALSE, $5, $6) 
-            RETURNING id, content, owner`,
-      values: [id, content, owner, comment, createdAt, createdAt],
+             RETURNING id, content, owner`,
+      values: [id, content, owner, commentId, createdAt, createdAt],
     };
 
     const result = await this._pool.query(query);

@@ -27,7 +27,7 @@ describe('ReplyRepositoryPostgres', () => {
       const createReply = new CreateReply({
         content: 'reply content',
         owner: 'user-123',
-        comment: 'comment-123',
+        commentId: 'comment-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);

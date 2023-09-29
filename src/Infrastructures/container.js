@@ -20,18 +20,21 @@ const CreateThreadUseCase = require('../Applications/use_case/CreateThreadUseCas
 const CreateCommentUseCase = require('../Applications/use_case/CreateCommentUseCase');
 const DeleteCommentUseCase = require('../Applications/use_case/DeleteCommentUseCase');
 const DetailThreadUseCase = require('../Applications/use_case/DetailThreadUseCase');
+const CreateReplyUseCase = require('../Applications/use_case/CreateReplyUseCase');
 
 // Repository
 const CommentRepository = require('../Domains/comments/CommentRepository');
 const UserRepository = require('../Domains/users/UserRepository');
 const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
+const ReplyRepository = require('../Domains/replies/ReplyRepository');
 
 // Repository Postgres
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
+const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
 
 // helper
 const PasswordHash = require('../Applications/security/PasswordHash');
@@ -106,6 +109,20 @@ container.register([
     {
       key: CommentRepository.name,
       Class: CommentRepositoryPostgres,
+      parameter: {
+        dependencies: [
+          {
+            concrete: pool,
+          },
+          {
+            concrete: nanoid,
+          },
+        ],
+      },
+    },
+    {
+      key: ReplyRepository.name,
+      Class: ReplyRepositoryPostgres,
       parameter: {
         dependencies: [
           {
@@ -257,6 +274,27 @@ container.register([
             internal: ThreadRepository.name,
           },
           
+        ],
+      },
+    },
+    {
+      key: CreateReplyUseCase.name,
+      Class: CreateReplyUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          {
+            name: 'threadRepository',
+            internal: ThreadRepository.name,
+          },
+          {
+            name: 'commentRepository',
+            internal: CommentRepository.name,
+          },
+          {
+            name: 'replyRepository',
+            internal: ReplyRepository.name,
+          },
         ],
       },
     },
