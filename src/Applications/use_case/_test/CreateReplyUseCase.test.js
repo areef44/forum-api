@@ -12,7 +12,7 @@ describe('CreateReplyUseCase', () => {
   it('should orchestrating the create reply action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      content: 'First reply',
+      content: 'New Reply',
       owner: 'user-123',
       comment: 'comment-123',
     };
