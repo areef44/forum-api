@@ -14,7 +14,7 @@ exports.up = (pgm) => {
             type: 'VARCHAR(50)',
             notNull: true,
         },
-        thread: {
+        comment_id: {
             type: 'VARCHAR(50)',
             notNull: true,
         },
