@@ -46,7 +46,7 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(400);
         expect(responseJson.status).toEqual('fail');
-        expect(responseJson.message).toEqual('tidak dapat membuat balasan baru karena properti yang dibutuhkan tidak ada');
+        expect(responseJson.message).toEqual('tidak dapat membalas komentar karena properti yang dibutuhkan tidak ada');
     });
 
     it('should response 400 when request payload not meet data type specification', async () => {
@@ -75,7 +75,7 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(400);
         expect(responseJson.status).toEqual('fail');
-        expect(responseJson.message).toEqual('tidak dapat membuat balasan baru karena tipe data tidak sesuai');
+        expect(responseJson.message).toEqual('tidak dapat membalas komentar karena tipe data tidak sesuai');
     });
 
     it('should response 201 and persisted reply', async () => {
