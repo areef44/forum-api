@@ -109,7 +109,98 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
         expect(responseJson.status).toEqual('success');
         expect(responseJson.data.addedReply).toBeDefined();
       });
+  });
 
-   
+  describe('when DELETE /threads/{threadId}/comments/{commentId}/replies/{replyId}', () => {
+    it('should response 200 and delete reply successfully', async () => {
+      // Arrange
+      const accessToken = await ServerTestHelper.getAccessToken();
+      const server = await createServer(container);
+
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+
+      const threadId = 'thread-123';
+      await ThreadsTableTestHelper.createThread({ id: threadId });
+
+      const commentId = 'comment-123';
+      await CommentsTableTestHelper.createComment({ id: commentId, threadId });
+
+      const replyId = 'reply-123';
+      await RepliesTableTestHelper.addReply({ id: replyId, commentId });
+
+      // Action
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadId}/comments/${commentId}/replies/${replyId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+
+    it('should response 403 when user is not an authorized owner of the reply', async () => {
+      // Arrange
+      const accessToken = await ServerTestHelper.getAccessToken();
+      const server = await createServer(container);
+
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      
+      const anotherUserId = 'user-not-owner';
+      await UsersTableTestHelper.addUser({ id: anotherUserId, username: 'user-not-owner' });
+
+      const threadId = 'thread-123';
+      await ThreadsTableTestHelper.createThread({ id: threadId });
+
+      const commentId = 'comment-123';
+      await CommentsTableTestHelper.createComment({ id: commentId, threadId });
+
+      const replyId = 'reply-123';
+      await RepliesTableTestHelper.addReply({ id: replyId, commentId, owner: anotherUserId });
+
+      // Action
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadId}/comments/${commentId}/replies/${replyId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(403);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('tidak dapat mengakses resource ini');
+    });
+
+    it('should response 404 when thread or comment does not exist', async () => {
+      // Arrange
+      const accessToken = await ServerTestHelper.getAccessToken();
+      const server = await createServer(container);
+
+      const threadId = 'thread-135';
+      const commentId = 'comment-246';
+      const replyId = 'reply-789';
+
+      // Action
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadId}/comments/${commentId}/replies/${replyId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toBeDefined();
+    });
   });
 });

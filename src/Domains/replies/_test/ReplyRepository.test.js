@@ -7,5 +7,6 @@ describe('ReplyRepository interface', () => {
 
     // Action and Assert
     await expect(replyRepository.createReply({})).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(replyRepository.getRepliesByThreadId('')).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

@@ -7,6 +7,14 @@ const routes = (handler) => ([
         auth: 'forumapi_auth' 
     },
     },
+    {
+      method: 'DELETE',
+      path: '/threads/{threadId}/comments/{commentId}/replies/{replyId}',
+      handler: handler.deleteReplyByIdHandler,
+      options: { 
+        auth: 'forumapi_auth' 
+      },
+    },
   ]);
   
   module.exports = routes;
