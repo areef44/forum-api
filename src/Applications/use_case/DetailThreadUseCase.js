@@ -1,22 +1,55 @@
-const DetailThread = require('../../Domains/threads/entities/DetailThread');
-const DetailComment = require('../../Domains/comments/entities/DetailComment');
-
 class DetailThreadUseCase {
-    constructor({ threadRepository, commentRepository }) {
+    constructor({ threadRepository, commentRepository , replyRepository}) {
         this._threadRepository = threadRepository;
         this._commentRepository = commentRepository;
+        this._replyRepository = replyRepository;
     }
 
     async execute(useCasePayload) {
-        const { thread } = new DetailThread(useCasePayload);
-        await this._threadRepository.checkAvailabilityThread(thread);
-        const detailThread = await this._threadRepository.getDetailThread(thread);
-        const getCommentsThread = await this._commentRepository.getCommentsThread(thread);
-
-        detailThread.comments = new DetailComment({comments: getCommentsThread}).comments;
+        const thread = await this._threadRepository.getDetailThread(useCasePayload);
+        const comments = await this._commentRepository.getCommentsThread(useCasePayload);
+        const replies = await this._replyRepository.getRepliesByThreadId(useCasePayload);
+        const validatedComments = this._validateDeletedComment(comments);
+        const validatedReplies = this._validateDeletedReply(replies);
+        const commentsWithReplies = this._addReplyToComment(validatedComments, validatedReplies);
         return {
-            thread: detailThread,
+        ...thread,
+        comments: commentsWithReplies,
         };
     }
+
+    _validateDeletedComment(comments) {
+        for (const comment of comments) {
+          if (comment.is_deleted) {
+            comment.content = '**komentar telah dihapus**';
+          }
+          delete comment.is_deleted;
+        }
+        return comments;
+    }
+
+    _validateDeletedReply(replies) {
+      for (const reply of replies) {
+        if (reply.is_delete) {
+          reply.content = '**balasan telah dihapus**';
+        }
+        delete reply.is_delete;
+      }
+      return replies;
+    }
+
+     _addReplyToComment(comments, replies) {
+    for (const comment of comments) {
+      comment.replies = [];
+      for (const reply of replies) {
+        if (reply.comment_id === comment.id) {
+          comment.replies.push(reply);
+        }
+        delete reply.comment_id;
+      }
+    }
+    return comments;
+  }
+
 }
 module.exports = DetailThreadUseCase;

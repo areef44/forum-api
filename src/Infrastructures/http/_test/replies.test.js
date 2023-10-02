@@ -20,6 +20,39 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
   });
 
   describe('when POST /threads/{threadId}/comments/{commentId}/replies', () => {
+    it('should response 404 when thread does exist not contain', async () => {
+      // Arrange
+      const requestPayload = { content: 'reply comment' };
+      const accessToken = await ServerTestHelper.getAccessToken();
+      const server = await createServer(container);
+
+      const threadId = 'xxxx';
+      const commentId = 'comment-_pby2-123';
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.createThread( threadId );
+      await CommentsTableTestHelper.createComment({ id: commentId, threadId });
+
+      const url = `/threads/${threadId}/comments/${commentId}/replies`
+      
+
+      // Action
+      const response = await server.inject({
+        method: 'POST',
+        url: url,
+        payload: requestPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      console.log(responseJson);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
+    });
+
     it('should response 400 when request payload not contain needed property', async () => {
         // Arrange
         const requestPayload = {};

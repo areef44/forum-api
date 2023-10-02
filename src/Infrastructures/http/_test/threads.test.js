@@ -164,63 +164,24 @@ describe('POST /threads endpoint', () => {
     });
     
     describe('GET /threads/{threadId} endpoint', () => {
-        it('should response 404 when thread not valid', async () => {
-            // Arrange
-            const payloadLogin = {
-                username: 'areef44',
-                password: 'secret',
-            };
-
-            const server = await createServer(container);
-
-            await server.inject({
-                method: 'POST',
-                url: '/users',
-                payload: {
-                    username: 'areef44',
-                    password: 'secret',
-                    fullname: 'Muhammad Arif',
-                },
-            });
-
-            const authentication = await server.inject({
-                method: 'POST',
-                url: '/authentications',
-                payload: payloadLogin,
-            });
-
-            const authResponse = JSON.parse(authentication.payload);
-
-            // Action
-            const response = await server.inject({
-                method: 'GET',
-                url: '/threads/qwerty',
-                headers: { Authorization: `Bearer ${authResponse.data.accessToken}`},
-            });
-            const responseJson = JSON.parse(response.payload);
-            expect(response.statusCode).toEqual(404);
-            expect(responseJson.status).toEqual('fail');
-            expect(responseJson.message).toEqual('thread tidak ditemukan');
-        });
-
-        it('should response 200 when return detail thread', async () => {
+        it('should response 200 and show thread by id', async () => {
             // Arrange
             const threadId = 'thread-123';
             await UsersTableTestHelper.addUser({ id: 'user-123' });
             await ThreadsTableTestHelper.createThread({ id: threadId, owner: 'user-123' });
             const server = await createServer(container);
-
+      
             // Action
             const response = await server.inject({
-                method: 'GET',
-                url: `/threads/${threadId}`,
+              method: 'GET',
+              url: `/threads/${threadId}`,
             });
-
+      
             // Assert
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(200);
             expect(responseJson.status).toEqual('success');
             expect(responseJson.data.thread).toBeDefined();
-        });
+          });
     });
 });

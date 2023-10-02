@@ -60,10 +60,25 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     };
 
     const result = await this._pool.query(query);
-
     if (!result.rowCount) {
       throw new NotFoundError('balasan tidak ditemukan');
     }
+
+  }
+
+  async getRepliesByThreadId(threadId) {
+    const query = {
+      text: `SELECT replies.id, replies.content, replies.created_at as date, users.username, replies.is_delete, replies.comment_id
+             FROM replies
+             INNER JOIN users ON replies.owner = users.id
+             INNER JOIN comments ON replies.comment_id = comments.id
+             WHERE comments.thread = $1
+             ORDER BY replies.created_at ASC`,
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows;
   }
 
 }
