@@ -17,7 +17,7 @@ describe('LogoutUserUseCase', () => {
           refreshToken: 123,
         };
         const logoutUserUseCase = new UserLogoutUseCase({});
-    
+
         // Action & Assert
         await expect(logoutUserUseCase.execute(useCasePayload))
           .rejects
@@ -33,7 +33,7 @@ describe('LogoutUserUseCase', () => {
         const mockAuthenticationRepository = new AuthenticationRepository();
         mockAuthenticationRepository.checkAvailabilityToken = jest.fn().mockImplementation(() => Promise.resolve());
         mockAuthenticationRepository.deleteToken = jest.fn().mockImplementation(() => Promise.resolve());
-    
+
         const logoutUserUseCase = new UserLogoutUseCase({
           authenticationRepository: mockAuthenticationRepository,
         });

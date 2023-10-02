@@ -1,6 +1,5 @@
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
-const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
 const createServer = require('../createServer');
@@ -65,7 +64,7 @@ describe('POST /threads endpoint', () => {
                 method: 'POST',
                 url: '/threads',
                 payload: {},
-                headers: { Authorization: `Bearer ${authResponse.data.accessToken}`},
+                headers: { Authorization: `Bearer ${authResponse.data.accessToken}` },
             });
 
             // Assert
@@ -75,7 +74,7 @@ describe('POST /threads endpoint', () => {
             expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena properti yang dibutuhkan tidak ada');
         });
 
-        it('should response 400 when payload not meet data type specification', async() => {
+        it('should response 400 when payload not meet data type specification', async () => {
             // Arrange
             const payloadLogin = {
                 username: 'areef44',
@@ -110,7 +109,7 @@ describe('POST /threads endpoint', () => {
                     title: 987,
                     body: ['sebuah body thread'],
                 },
-                headers: { Authorization: `Bearer ${authResponse.data.accessToken}`},
+                headers: { Authorization: `Bearer ${authResponse.data.accessToken}` },
             });
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(400);
@@ -125,7 +124,6 @@ describe('POST /threads endpoint', () => {
                 password: 'secret',
             };
 
-            
             const server = await createServer(container);
 
             await server.inject({
@@ -154,7 +152,7 @@ describe('POST /threads endpoint', () => {
                     title: 'sebuah thread',
                     body: 'sebuah body thread',
                 },
-                headers: { Authorization: `Bearer ${authResponse.data.accessToken}`},
+                headers: { Authorization: `Bearer ${authResponse.data.accessToken}` },
             });
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(201);
@@ -162,7 +160,7 @@ describe('POST /threads endpoint', () => {
             expect(responseJson.data.addedThread).toBeDefined();
         });
     });
-    
+
     describe('GET /threads/{threadId} endpoint', () => {
         it('should response 200 and show thread by id', async () => {
             // Arrange
@@ -170,13 +168,13 @@ describe('POST /threads endpoint', () => {
             await UsersTableTestHelper.addUser({ id: 'user-123' });
             await ThreadsTableTestHelper.createThread({ id: threadId, owner: 'user-123' });
             const server = await createServer(container);
-      
+
             // Action
             const response = await server.inject({
               method: 'GET',
               url: `/threads/${threadId}`,
             });
-      
+
             // Assert
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(200);

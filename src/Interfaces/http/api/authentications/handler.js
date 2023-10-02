@@ -1,4 +1,4 @@
-const UserLoginUseCase = require("../../../../Applications/use_case/UserLoginUseCase");
+const UserLoginUseCase = require('../../../../Applications/use_case/UserLoginUseCase');
 const RefreshAuthenticationUseCase = require('../../../../Applications/use_case/RefreshAuthenticationUseCase');
 const UserLogoutUseCase = require('../../../../Applications/use_case/UserLogoutUseCase');
 
@@ -22,7 +22,7 @@ class AuthenticationsHandler {
             },
         }).code(201);
     }
-    
+
     async putAuthenticationHandler(request) {
         const refreshAuthenticationUseCase = this._container.getInstance(RefreshAuthenticationUseCase.name);
         const accessToken = await refreshAuthenticationUseCase.execute(request.payload);

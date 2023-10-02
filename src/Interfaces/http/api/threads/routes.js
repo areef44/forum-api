@@ -5,7 +5,7 @@ const routes = (handler) => ([
         handler: handler.postThreadHandler,
         options: {
             auth: 'forumapi_auth',
-        }
+        },
     },
     {
         method: 'GET',

@@ -6,15 +6,14 @@ class DeleteCommentUseCase {
 
     _validatePayload(payload) {
         const { thread, comment, owner } = payload;
-    
+
         if (!thread || !comment || !owner) {
           throw new Error('DELETE_COMMENT_USE_CASE.NOT_CONTAIN_VALID_PAYLOAD');
         }
-    
+
         if (typeof thread !== 'string' || typeof comment !== 'string' || typeof owner !== 'string') {
           throw new Error('DELETE_COMMENT_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
-
     }
 
     async execute(useCasePayload) {

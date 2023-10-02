@@ -7,7 +7,7 @@ describe('CreateThread entities', () => {
             title: 'sebuah thread',
             owner: 'dicoding',
         };
-    
+
         // Action and Assert
         expect(() => new CreateThread(payload)).toThrowError('CREATE_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     });
@@ -53,4 +53,3 @@ describe('CreateThread entities', () => {
         expect(owner).toEqual(payload.owner);
     });
 });
-

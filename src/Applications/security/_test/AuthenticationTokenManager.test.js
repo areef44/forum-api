@@ -1,7 +1,7 @@
 const AuthenticationTokenManager = require('../AuthenticationTokenManager');
 
 describe('AuthenticationTokenManager interface', () => {
-    it('should throw error when invoke unimplemeted method', async () =>{
+    it('should throw error when invoke unimplemeted method', async () => {
         // Arrange
         const authenticationTokenManager = new AuthenticationTokenManager();
 

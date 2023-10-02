@@ -1,6 +1,6 @@
 const CreatedComment = require('../CreatedComment');
 
-describe ('CreatedComment entities', () => {
+describe('CreatedComment entities', () => {
     it('should throw error when payload did not contain needed property', () => {
         // Arrange
         const payload = {
@@ -30,7 +30,7 @@ describe ('CreatedComment entities', () => {
             id: 'comment-_user123',
             content: 'sebuah comment',
             owner: 'dicoding',
-        }
+        };
 
         // Action
         const createdComment = new CreatedComment(payload);

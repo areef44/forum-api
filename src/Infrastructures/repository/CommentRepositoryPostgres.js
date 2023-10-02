@@ -1,5 +1,5 @@
-const NotFoundError = require("../../Commons/exceptions/NotFoundError");
-const CommentRepository = require("../../Domains/comments/CommentRepository");
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const CommentRepository = require('../../Domains/comments/CommentRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 
@@ -22,7 +22,6 @@ class CommentRepositoryPostgres extends CommentRepository {
             values: [id, thread, content, owner, createdAt],
         };
 
-
         const result = await this._pool.query(query);
 
         return new CreatedComment(result.rows[0]);
@@ -30,14 +29,14 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     async checkAvailabilityComment(comment) {
         const query = {
-            text:  `SELECT * FROM comments
-                    WHERE id = $1`,
+            text: `SELECT * FROM comments
+                   WHERE id = $1`,
             values: [comment],
         };
 
         const result = await this._pool.query(query);
 
-        if(result.rowCount === 0) {
+        if (result.rowCount === 0) {
             throw new NotFoundError('komentar tidak ditemukan');
         }
     }
@@ -52,16 +51,16 @@ class CommentRepositoryPostgres extends CommentRepository {
 
         const result = await this._pool.query(query);
 
-        if(result.rowCount === 0) {
+        if (result.rowCount === 0) {
             throw new AuthorizationError('kamu tidak bisa menghapus komentar punya orang lain.');
         }
     }
 
     async deleteComment(comment) {
         const query = {
-            text:  `UPDATE comments
-                    SET is_deleted=TRUE
-                    WHERE id = $1`,
+            text: `UPDATE comments
+                   SET is_deleted=TRUE
+                   WHERE id = $1`,
             values: [comment],
         };
 
@@ -71,15 +70,15 @@ class CommentRepositoryPostgres extends CommentRepository {
     async getCommentsThread(thread) {
         const query = {
             text: `SELECT c.id, u.username, c.created_at as date, c.content, c.is_deleted 
-            FROM comments c 
-            LEFT JOIN users u ON u.id = c.owner 
-            WHERE thread = $1 
+            FROM comments c
+            LEFT JOIN users u ON u.id = c.owner
+            WHERE thread = $1
             ORDER BY c.created_at ASC`,
             values: [thread],
         };
 
-        const { rows } = await  this._pool.query(query);
-        
+        const { rows } = await this._pool.query(query);
+
         return rows;
     }
 }

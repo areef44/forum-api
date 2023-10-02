@@ -9,11 +9,11 @@ class MakeAuth {
     _verifyPayload(payload) {
         const { accessToken, refreshToken } = payload;
 
-        if( !accessToken || !refreshToken ) {
+        if (!accessToken || !refreshToken) {
             throw new Error('MAKE_AUTH.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
-        if(typeof accessToken !== 'string' || typeof refreshToken !== 'string') {
+        if (typeof accessToken !== 'string' || typeof refreshToken !== 'string') {
             throw new Error('MAKE_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }

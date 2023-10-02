@@ -6,19 +6,18 @@ const pool = require('../../database/postgres/pool');
 const container = require('../../container');
 const createServer = require('../createServer');
 
-
 describe('/threads/{threadId}/comments endpoint', () => {
     afterAll(async () => {
         await pool.end();
     });
-    
+
     afterEach(async () => {
         await CommentsTableTestHelper.cleanTable();
         await ThreadsTableTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
     });
 
-    describe("when POST /threads/{threadId}/comments", () => {
+    describe('when POST /threads/{threadId}/comments', () => {
       it('should response 201 and added comment', async () => {
         const payload = {
           content: 'sebuah comment',
@@ -33,7 +32,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
         await ThreadsTableTestHelper.createThread(thread);
         const accessToken = await ServerTestHelper.getAccessToken();
         const server = await createServer(container);
-  
+
         const response = await server.inject({
           url: '/threads/thread-123/comments',
           method: 'POST',
@@ -42,7 +41,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(201);
         expect(responseJson.status).toEqual('success');
@@ -59,7 +58,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
           url: '/threads/xxx/comments',
           payload: {},
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(401);
         expect(responseJson.error).toEqual('Unauthorized');
@@ -72,9 +71,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-        
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -84,16 +83,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-        
-        
+
         const responseAuth = JSON.parse(authentication.payload);
-        
+
         const thread = await server.inject({
           method: 'POST',
           url: '/threads',
@@ -103,13 +101,12 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-        
-        
+
         const threadResponse = JSON.parse(thread.payload);
 
         const threadId = threadResponse.data.addedThread.id;
         const url = `/threads/${threadId}/comments`;
-        
+
         // Action
         const response = await server.inject({
           method: 'POST',
@@ -117,7 +114,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
           payload: {},
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-        
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(400);
         expect(responseJson.status).toEqual('fail');
@@ -129,9 +126,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -141,15 +138,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const responseAuth = JSON.parse(authentication.payload);
-  
+
         const thread = await server.inject({
           method: 'POST',
           url: '/threads',
@@ -159,7 +156,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const threadResponse = JSON.parse(thread.payload);
         // Action
         const response = await server.inject({
@@ -170,7 +167,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(400);
         expect(responseJson.status).toEqual('fail');
@@ -182,9 +179,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -194,13 +191,13 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const authResponse = JSON.parse(authentication.payload);
         // Action
         const response = await server.inject({
@@ -211,13 +208,12 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${authResponse.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(404);
         expect(responseJson.status).toEqual('fail');
         expect(responseJson.message).toEqual('thread tidak ditemukan');
       });
-
     });
 
     describe('when DELETE /threads/{threadId}/comments', () => {
@@ -226,14 +222,14 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const payloadLoginOtherUser = {
           username: 'otheruser',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -243,7 +239,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -253,15 +249,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'other user fullname',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const responseAuth = JSON.parse(authentication.payload);
-  
+
         const thread = await server.inject({
           method: 'POST',
           url: '/threads',
@@ -271,39 +267,39 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const threadResponse = JSON.parse(thread.payload);
 
-        const url = `/threads/${threadResponse.data.addedThread.id}/comments`
-  
+        const url = `/threads/${threadResponse.data.addedThread.id}/comments`;
+
         const comment = await server.inject({
           method: 'POST',
-          url: url ,
+          url: url,
           payload: {
             content: 'sebuah comment',
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const commentResponse = JSON.parse(comment.payload);
-  
+
         const authenticationOtherUser = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLoginOtherUser,
         });
-  
+
         const responseAuthOtherUser = JSON.parse(authenticationOtherUser.payload);
 
         const url2 = `/threads/${threadResponse.data.addedThread.id}/comments/${commentResponse.data.addedComment.id}`;
-  
+
         // Action
         const response = await server.inject({
           method: 'DELETE',
           url: url2,
           headers: { Authorization: `Bearer ${responseAuthOtherUser.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(403);
         expect(responseJson.status).toEqual('fail');
@@ -315,9 +311,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -327,24 +323,24 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const responseAuth = JSON.parse(authentication.payload);
 
-        const url = '/threads/qwerty/comments/qwerty'
-  
+        const url = '/threads/qwerty/comments/qwerty';
+
         // Action
         const response = await server.inject({
           method: 'DELETE',
           url: url,
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(404);
         expect(responseJson.status).toEqual('fail');
@@ -356,9 +352,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -368,15 +364,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const responseAuth = JSON.parse(authentication.payload);
-  
+
         const thread = await server.inject({
           method: 'POST',
           url: '/threads',
@@ -386,9 +382,9 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const threadResponse = JSON.parse(thread.payload);
-        
+
         const url = `/threads/${threadResponse.data.addedThread.id}/comments/qwerty`;
         // Action
         const response = await server.inject({
@@ -396,21 +392,21 @@ describe('/threads/{threadId}/comments endpoint', () => {
           url: url,
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(404);
         expect(responseJson.status).toEqual('fail');
         expect(responseJson.message).toEqual('komentar tidak ditemukan');
       });
-      
+
       it('should response 200 and return success message', async () => {
         const payloadLogin = {
           username: 'areef44',
           password: 'secret',
         };
-  
+
         const server = await createServer(container);
-  
+
         await server.inject({
           method: 'POST',
           url: '/users',
@@ -420,15 +416,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
             fullname: 'Muhammad Arif',
           },
         });
-  
+
         const authentication = await server.inject({
           method: 'POST',
           url: '/authentications',
           payload: payloadLogin,
         });
-  
+
         const responseAuth = JSON.parse(authentication.payload);
-  
+
         const thread = await server.inject({
           method: 'POST',
           url: '/threads',
@@ -438,11 +434,11 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const threadResponse = JSON.parse(thread.payload);
 
         const url = `/threads/${threadResponse.data.addedThread.id}/comments`;
-  
+
         const comment = await server.inject({
           method: 'POST',
           url: url,
@@ -451,22 +447,21 @@ describe('/threads/{threadId}/comments endpoint', () => {
           },
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const commentResponse = JSON.parse(comment.payload);
-  
+
         const url2 = `/threads/${threadResponse.data.addedThread.id}/comments/${commentResponse.data.addedComment.id}`;
-        
+
         // Action
         const response = await server.inject({
           method: 'DELETE',
           url: url2,
           headers: { Authorization: `Bearer ${responseAuth.data.accessToken}` },
         });
-  
+
         const responseJson = JSON.parse(response.payload);
         expect(response.statusCode).toEqual(200);
         expect(responseJson.status).toEqual('success');
       });
     });
 });
-

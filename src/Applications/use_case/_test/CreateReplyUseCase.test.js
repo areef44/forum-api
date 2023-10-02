@@ -22,7 +22,7 @@ describe('CreateReplyUseCase', () => {
         content: useCasePayload.content,
         owner: useCasePayload.owner,
     });
-    
+
     /** creating dependency of use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
@@ -31,7 +31,7 @@ describe('CreateReplyUseCase', () => {
     /** mocking needed function */
     mockThreadRepository.getDetailThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadRepository.checkAvailabilityThread = jest.fn().mockImplementation(() => Promise.resolve());
-    mockCommentRepository.checkAvailabilityComment= jest.fn().mockImplementation(() => Promise.resolve());
+    mockCommentRepository.checkAvailabilityComment = jest.fn().mockImplementation(() => Promise.resolve());
     mockReplyRepository.createReply = jest.fn().mockImplementation(() => Promise.resolve(expectedCreatedReply));
 
     /** creating use case instance */
@@ -46,7 +46,7 @@ describe('CreateReplyUseCase', () => {
 
     // Assert
     expect(createdReply).toStrictEqual(expectedCreatedReply);
-    expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(useCasePayload.threadId)
+    expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.commentId);
     expect(mockReplyRepository.createReply).toBeCalledWith(new CreateReply({
       content: useCasePayload.content,

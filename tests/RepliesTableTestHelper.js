@@ -3,12 +3,12 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const RepliesTableTestHelper = {
   async addReply({
-    id = 'reply-123', 
-    content = 'sebuah reply', 
+    id = 'reply-123',
+    content = 'sebuah reply',
     owner = 'user-123',
-    comment = 'comment-123', 
-    isDelete = false, 
-    createdAt = 'sebuah tanggal', 
+    comment = 'comment-123',
+    isDelete = false,
+    createdAt = 'sebuah tanggal',
     updatedAt = 'sebuah tanggal',
   }) {
     const query = {
@@ -21,7 +21,8 @@ const RepliesTableTestHelper = {
 
   async findRepliesById(id) {
     const query = {
-      text: 'SELECT * FROM replies WHERE id = $1',
+      text: `SELECT * FROM replies 
+             WHERE id = $1`,
       values: [id],
     };
 

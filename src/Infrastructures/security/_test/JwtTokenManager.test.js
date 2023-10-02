@@ -4,7 +4,6 @@ const JwtTokenManager = require('../JwtTokenManager');
 const AuthenticationTokenManager = require('../../../Applications/security/AuthenticationTokenManager');
 
 describe('JwtTokenManager', () => {
-    
     it('should instance of AuthenticationTokenManager', () => {
         expect(new JwtTokenManager()).toBeInstanceOf(AuthenticationTokenManager);
     });
@@ -37,7 +36,7 @@ describe('JwtTokenManager', () => {
             };
             const mockJwtToken = {
                 generate: jest.fn().mockImplementation(() => 'mock_token'),
-            }
+            };
             const jwtTokenManager = new JwtTokenManager(mockJwtToken);
 
             // Action
@@ -53,7 +52,7 @@ describe('JwtTokenManager', () => {
         it('should throw InvariantError when verification failed', async () => {
             // Arrange
             const jwtTokenManager = new JwtTokenManager(Jwt.token);
-            const accessToken = await jwtTokenManager.createAccessToken({username: 'dicoding'});
+            const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding' });
 
             // Action & Assert
             await expect(jwtTokenManager.verifyRefreshToken(accessToken)).rejects.toThrow(InvariantError);
@@ -73,7 +72,7 @@ describe('JwtTokenManager', () => {
         it('should decode payload correctly', async () => {
             // Arrange
             const jwtTokenManager = new JwtTokenManager(Jwt.token);
-            const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding'});
+            const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding' });
 
             // Action
             const { username: expectedUsername } = await jwtTokenManager.decodePayload(accessToken);

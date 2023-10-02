@@ -18,7 +18,7 @@ describe('DeleteCommentUseCase', () => {
           owner: 4234324,
         };
         const deleteCommentUseCase = new DeleteCommentUseCase({});
-    
+
         // Action & Assert
         await expect(deleteCommentUseCase.execute(useCasePayload)).rejects.toThrowError('DELETE_COMMENT_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
@@ -32,20 +32,20 @@ describe('DeleteCommentUseCase', () => {
         };
         const mockCommentRepository = new CommentRepository();
         const mockThreadRepository = new ThreadRepository();
-    
+
         mockThreadRepository.checkAvailabilityThread = jest.fn().mockImplementation(() => Promise.resolve());
         mockCommentRepository.checkAvailabilityComment = jest.fn().mockImplementation(() => Promise.resolve());
         mockCommentRepository.verifyCommentOwner = jest.fn().mockImplementation(() => Promise.resolve());
         mockCommentRepository.deleteComment = jest.fn().mockImplementation(() => Promise.resolve());
-    
+
         const deleteCommentUseCase = new DeleteCommentUseCase({
           threadRepository: mockThreadRepository,
           commentRepository: mockCommentRepository,
         });
-    
+
         // Action
         await deleteCommentUseCase.execute(useCasePayload);
-    
+
         // Assert
         expect(mockThreadRepository.checkAvailabilityThread).toHaveBeenCalledWith(useCasePayload.thread);
         expect(mockCommentRepository.checkAvailabilityComment).toHaveBeenCalledWith(useCasePayload.comment);

@@ -219,7 +219,7 @@ describe('/authentications endpoint', () => {
                 url: '/authentications',
                 payload: {
                     refreshToken: 123,
-                }
+                },
             });
 
             // Assert
@@ -239,7 +239,7 @@ describe('/authentications endpoint', () => {
                 url: '/authentications',
                 payload: {
                     refreshToken: 'invalid_refresh_token',
-                }
+                },
             });
 
             // Assert
@@ -253,7 +253,7 @@ describe('/authentications endpoint', () => {
             // Arrange
             const server = await createServer(container);
             const refreshToken = await container.getInstance(AuthenticationsTokenManager.name).createRefreshToken({
-                username: 'dicoding'
+                username: 'dicoding',
             });
 
             // Action

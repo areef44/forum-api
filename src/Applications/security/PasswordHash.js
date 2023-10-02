@@ -1,6 +1,6 @@
 class PasswordHash {
     async hash(password) {
-        throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED')
+        throw new Error('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
     }
 
     async comparePassword(plain, encrypted) {

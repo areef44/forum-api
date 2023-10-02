@@ -5,7 +5,7 @@ const { createContainer } = require('instances-container');
 const { nanoid } = require('nanoid');
 const bcrypt = require('bcrypt');
 const Jwt = require('@hapi/jwt');
-const pool = require('./database/postgres/pool')
+const pool = require('./database/postgres/pool');
 
 // service (repository, helper, manager, etc)
 const BcryptPasswordHash = require('./security/BcryptPasswordHash');
@@ -22,7 +22,6 @@ const DeleteCommentUseCase = require('../Applications/use_case/DeleteCommentUseC
 const DetailThreadUseCase = require('../Applications/use_case/DetailThreadUseCase');
 const CreateReplyUseCase = require('../Applications/use_case/CreateReplyUseCase');
 const DeleteReplyUseCase = require('../Applications/use_case/DeleteReplyUseCase');
-
 
 // Repository
 const CommentRepository = require('../Domains/comments/CommentRepository');
@@ -239,7 +238,6 @@ container.register([
             name: 'commentRepository',
             internal: CommentRepository.name,
           },
-          
         ],
       },
     },
@@ -257,7 +255,6 @@ container.register([
             name: 'threadRepository',
             internal: ThreadRepository.name,
           },
-          
         ],
       },
     },

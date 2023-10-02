@@ -48,7 +48,7 @@ describe('DetailThread entities', () => {
                 username: 'dicoding',
                 date: '2023-09-28T08:06:24.614Z',
                 content: '**komentar telah dihapus**',
-            }
+            },
         ];
         expect(comments).toEqual(expectedComment);
     });

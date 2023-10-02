@@ -14,12 +14,11 @@ class BcryptPasswordHash extends PasswordHash {
 
     async comparePassword(password, hashedPassword) {
         const result = await this._bcrypt.compare(password, hashedPassword);
-    
+
         if (!result) {
           throw new AuthenticationError('Kredensial yang anda masukan salah');
         }
     }
-
 }
 
 module.exports = BcryptPasswordHash;

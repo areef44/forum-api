@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 exports.up = (pgm) => {
-    pgm.createTable('threads',{
+    pgm.createTable('threads', {
         id: {
             type: 'VARCHAR(50)',
             primaryKey: true,
@@ -25,7 +25,7 @@ exports.up = (pgm) => {
         updated_at: {
             type: 'TEXT',
             notNull: true,
-        }
+        },
     });
 
     pgm.addConstraint('threads', 'fk_threads.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');

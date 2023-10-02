@@ -2,7 +2,7 @@ const AuthenticationTokenManager = require('../../Applications/security/Authenti
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 
 class JwtTokenManager extends AuthenticationTokenManager {
-    constructor(jwt){
+    constructor(jwt) {
         super();
         this._jwt = jwt;
     }

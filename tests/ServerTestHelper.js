@@ -11,7 +11,7 @@ const ServerTestHelper = {
     };
     const accessToken = Jwt.token.generate(
       userPayload,
-      process.env.ACCESS_TOKEN_KEY
+      process.env.ACCESS_TOKEN_KEY,
     );
 
     return accessToken;

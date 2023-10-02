@@ -8,4 +8,3 @@ module.exports = {
         server.route(routes(usersHandler));
     },
 };
-

@@ -4,7 +4,7 @@ class DeleteReplyUseCase {
       this._commentRepository = commentRepository;
       this._replyRepository = replyRepository;
     }
-  
+
     async execute(useCasePayload) {
       await this._threadRepository.checkAvailabilityThread(useCasePayload.threadId);
       await this._commentRepository.checkAvailabilityComment(useCasePayload.commentId);
@@ -13,5 +13,5 @@ class DeleteReplyUseCase {
       await this._replyRepository.deleteReplyById(useCasePayload.replyId);
     }
   }
-  
+
   module.exports = DeleteReplyUseCase;

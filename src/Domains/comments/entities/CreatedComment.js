@@ -1,5 +1,5 @@
 class CreatedComment {
-    constructor(payload){
+    constructor(payload) {
         this._verifyPayload(payload);
         const { id, content, owner } = payload;
 
@@ -9,7 +9,7 @@ class CreatedComment {
     }
 
     _verifyPayload({ id, content, owner }) {
-    if ( !id || !content || !owner) {
+    if (!id || !content || !owner) {
             throw new Error('CREATED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 

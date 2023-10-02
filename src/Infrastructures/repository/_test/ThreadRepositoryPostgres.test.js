@@ -1,16 +1,15 @@
-const ThreadTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
-const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
-const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
-const CreateThread = require("../../../Domains/threads/entities/CreateThread");
-const CreatedThread = require("../../../Domains/threads/entities/CreatedThread");
-const pool = require("../../database/postgres/pool");
+const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const CreateThread = require('../../../Domains/threads/entities/CreateThread');
+const CreatedThread = require('../../../Domains/threads/entities/CreatedThread');
+const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
-
-describe ('thread Repository Postgres', () => {
+describe('thread Repository Postgres', () => {
     it('should be instance of thread repository domain', () => {
-        const threadRepositoryPostgres = new ThreadRepositoryPostgres({},{}); // Dummy
+        const threadRepositoryPostgres = new ThreadRepositoryPostgres({}, {}); // Dummy
 
         expect(threadRepositoryPostgres).toBeInstanceOf(ThreadRepository);
     });
@@ -24,7 +23,6 @@ describe ('thread Repository Postgres', () => {
         afterAll(async () => {
             await pool.end();
         });
-
 
         describe('createThread function', () => {
             it('should persist new thread and return created thread correctly', async () => {
@@ -64,7 +62,7 @@ describe ('thread Repository Postgres', () => {
             it('should not throw NotFoundError when thread available', async () => {
                 // Arrange
                 const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-                await UsersTableTestHelper.addUser({id: 'user-123456789', username: 'areef44'});
+                await UsersTableTestHelper.addUser({ id: 'user-123456789', username: 'areef44' });
                 await ThreadTableTestHelper.createThread({ id: 'thread-h_123', body: 'sebuah thread', owner: 'user-123456789' });
 
                 // Action & Assert
@@ -84,9 +82,9 @@ describe ('thread Repository Postgres', () => {
               };
               await UsersTableTestHelper.addUser(userPayload);
               await ThreadTableTestHelper.createThread(threadPayload);
-      
+
               const detailThread = await threadRepository.getDetailThread(threadPayload.id);
-      
+
               expect(detailThread.id).toEqual(threadPayload.id);
               expect(detailThread.title).toEqual(threadPayload.title);
               expect(detailThread.body).toEqual(threadPayload.body);

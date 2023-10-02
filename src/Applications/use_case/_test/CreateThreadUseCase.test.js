@@ -5,7 +5,7 @@ const CreateThreadUseCase = require('../CreateThreadUseCase');
 const AuthenticationTokenManager = require('../../security/AuthenticationTokenManager');
 
 describe('CreateThreadUseCase', () => {
-    it('should orchestrating the create thread action correctly', async () =>{
+    it('should orchestrating the create thread action correctly', async () => {
         // Arrange
         const useCasePayload = {
             title: 'sebuah thread',
@@ -38,6 +38,5 @@ describe('CreateThreadUseCase', () => {
             body: useCasePayload.body,
             owner: useCasePayload.owner,
         }));
-
     });
 });

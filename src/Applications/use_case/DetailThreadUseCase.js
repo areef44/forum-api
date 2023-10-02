@@ -1,5 +1,5 @@
 class DetailThreadUseCase {
-    constructor({ threadRepository, commentRepository , replyRepository}) {
+    constructor({ threadRepository, commentRepository, replyRepository }) {
         this._threadRepository = threadRepository;
         this._commentRepository = commentRepository;
         this._replyRepository = replyRepository;
@@ -50,6 +50,6 @@ class DetailThreadUseCase {
     }
     return comments;
   }
-
 }
+
 module.exports = DetailThreadUseCase;

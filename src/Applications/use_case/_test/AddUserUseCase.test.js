@@ -32,9 +32,6 @@ describe('AddUserUseCase', () => {
             passwordHash: mockPasswordHash,
         });
 
-
-        
-
         // Action
         const registeredUser = await getUserUseCase.execute(useCasePayload);
 

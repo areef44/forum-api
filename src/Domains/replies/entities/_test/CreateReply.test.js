@@ -15,7 +15,7 @@ describe('CreateReply entities', () => {
     // Arrange
     const payload = {
       content: 12345,
-      owner:  { id: 'user-123'},
+      owner: { id: 'user-123' },
       commentId: 'comment-123',
     };
 

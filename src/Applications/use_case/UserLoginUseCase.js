@@ -18,7 +18,7 @@ class UserLoginUseCase {
         const { username, password } = new UserLogin(useCasePayload);
 
         const encryptedPassword = await this._userRepository.getPasswordByUsername(username);
-        
+
         await this._passwordHash.comparePassword(password, encryptedPassword);
 
         const id = await this._userRepository.getIdByUsername(username);

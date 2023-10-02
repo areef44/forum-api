@@ -5,18 +5,17 @@ class DetailComment {
         this.comments = comments;
     }
 
-    _verifyPayload({ comments}) {
-        if(!comments) {
+    _verifyPayload({ comments }) {
+        if (!comments) {
             throw new Error('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
-        if(!Array.isArray(comments)) {
+        if (!Array.isArray(comments)) {
             throw new Error('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }
 
-    _mapComment({ comments }){
-        
+    _mapComment({ comments }) {
         return comments.map((comment) => ({
             id: comment.id,
             username: comment.username,

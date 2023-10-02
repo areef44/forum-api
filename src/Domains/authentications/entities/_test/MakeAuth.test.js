@@ -18,7 +18,7 @@ describe('MakeAuth entities', () => {
             refreshToken: 1234,
         };
 
-        //Action & Assert
+        // Action & Assert
         expect(() => new MakeAuth(payload)).toThrowError('MAKE_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 

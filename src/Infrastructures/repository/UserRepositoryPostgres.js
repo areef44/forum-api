@@ -3,7 +3,7 @@ const RegisteredUser = require('../../Domains/users/entities/RegisteredUser');
 const UserRepository = require('../../Domains/users/UserRepository');
 
 class UserRepositoryPostgres extends UserRepository {
-    constructor(pool, idGenerator){
+    constructor(pool, idGenerator) {
         super();
         this._pool = pool;
         this._idGenerator = idGenerator;
@@ -11,9 +11,9 @@ class UserRepositoryPostgres extends UserRepository {
 
     async verifyAvailableUsername(username) {
         const query = {
-            text:  `SELECT username
-                    FROM users
-                    WHERE username = $1`,
+            text: `SELECT username
+                   FROM users
+                   WHERE username = $1`,
             values: [username],
         };
 
@@ -41,17 +41,16 @@ class UserRepositoryPostgres extends UserRepository {
     }
 
     async getPasswordByUsername(username) {
-
         const query = {
             text: `SELECT password
                    FROM users
                    WHERE username = $1`,
-            values:[username],
+            values: [username],
         };
-            
+
         const result = await this._pool.query(query);
 
-        if(!result.rowCount) {
+        if (!result.rowCount) {
             throw new InvariantError('username tidak ditemukan');
         }
 
@@ -68,7 +67,7 @@ class UserRepositoryPostgres extends UserRepository {
 
         const result = await this._pool.query(query);
 
-        if(!result.rowCount) {
+        if (!result.rowCount) {
             throw new InvariantError('user tidak ditemukan');
         }
 

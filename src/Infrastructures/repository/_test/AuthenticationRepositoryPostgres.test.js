@@ -23,10 +23,10 @@ describe('AuthenticationRepositoryPostgres', () => {
                 // Arrange
                 const authenticationRepositoryPostgres = new AuthenticationRepositoryPostgres(pool);
                 const token = 'token';
-    
+
                 // Action
                 await authenticationRepositoryPostgres.addToken(token);
-    
+
                 // Assert
                 const tokens = await AuthenticationsTableTestHelper.findToken(token);
                 expect(tokens).toHaveLength(1);
@@ -39,17 +39,17 @@ describe('AuthenticationRepositoryPostgres', () => {
                 // Arrange
                 const authenticationRepositoryPostgres = new AuthenticationRepositoryPostgres(pool);
                 const token = 'token';
-    
+
                 // Action & Expert
                 await expect(authenticationRepositoryPostgres.checkAvailabilityToken(token)).rejects.toThrow(InvariantError);
             });
-    
+
             it('should not throw InvariantError if token available', async () => {
                 // Arrange
                 const authenticationRepositoryPostgres = new AuthenticationRepositoryPostgres(pool);
                 const token = 'token';
                 await AuthenticationsTableTestHelper.addToken(token);
-    
+
                 // Action & Assert
                 await expect(authenticationRepositoryPostgres.checkAvailabilityToken(token)).resolves.not.toThrow(InvariantError);
             });
@@ -61,10 +61,10 @@ describe('AuthenticationRepositoryPostgres', () => {
                 const authenticationRepositoryPostgres = new AuthenticationRepositoryPostgres(pool);
                 const token = 'token';
                 await AuthenticationsTableTestHelper.addToken(token);
-    
+
                 // Action
                 await authenticationRepositoryPostgres.deleteToken(token);
-    
+
                 // Assert
                 const tokens = await AuthenticationsTableTestHelper.findToken(token);
                 expect(tokens).toHaveLength(0);

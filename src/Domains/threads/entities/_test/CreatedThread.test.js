@@ -1,7 +1,7 @@
 const CreatedThread = require('../CreatedThread');
 
 describe('CreatedThread entities', () => {
-    it('should throw error when payload did not contain needed property',() => {
+    it('should throw error when payload did not contain needed property', () => {
         // Arrange
         const payload = {
             title: 'sebuah thread',
@@ -30,7 +30,7 @@ describe('CreatedThread entities', () => {
             id: 'thread-user1',
             title: 'sebuah thread',
             owner: 'dicoding',
-        }
+        };
 
         // Action
         const createThread = new CreatedThread(payload);
@@ -41,4 +41,4 @@ describe('CreatedThread entities', () => {
         expect(createThread.body).toEqual(payload.body);
         expect(createThread.owner).toEqual(payload.owner);
     });
-})
+});

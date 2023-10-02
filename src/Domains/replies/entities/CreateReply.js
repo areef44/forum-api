@@ -6,13 +6,13 @@ class CreateReply {
 
         this.content = content;
         this.owner = owner;
-        this.commentId= commentId;
+        this.commentId = commentId;
     }
 
     _verifyPayload(payload) {
         const { content, owner, commentId } = payload;
 
-        if(!content || !owner || !commentId ) {
+        if (!content || !owner || !commentId) {
             throw new Error('CREATE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
