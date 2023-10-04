@@ -14,15 +14,19 @@ describe('CreateCommentUseCase', () => {
 
         const expectedCreatedComment = new CreatedComment({
             id: 'comment-_user123',
-            content: 'sebuah comment',
-            owner: 'user-123',
+            content: useCasePayload.content,
+            owner: useCasePayload.owner,
         });
 
         const mockCommentRepository = new CommentRepository();
         const mockThreadRepository = new ThreadRepository();
 
         mockThreadRepository.checkAvailabilityThread = jest.fn(() => Promise.resolve());
-        mockCommentRepository.createComment = jest.fn().mockImplementation(() => Promise.resolve(expectedCreatedComment));
+        mockCommentRepository.createComment = jest.fn().mockImplementation(() => Promise.resolve(new CreatedComment({
+            id: 'comment-_user123',
+            content: useCasePayload.content,
+            owner: useCasePayload.owner,
+        })));
 
         const getCommentUseCase = new CreateCommentUseCase({
             commentRepository: mockCommentRepository,

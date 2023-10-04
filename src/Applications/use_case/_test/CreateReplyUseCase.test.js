@@ -29,7 +29,6 @@ describe('CreateReplyUseCase', () => {
     const mockReplyRepository = new ReplyRepository();
 
     /** mocking needed function */
-    mockThreadRepository.getDetailThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadRepository.checkAvailabilityThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockCommentRepository.checkAvailabilityComment = jest.fn().mockImplementation(() => Promise.resolve());
     mockReplyRepository.createReply = jest.fn().mockImplementation(() => Promise.resolve(expectedCreatedReply));
