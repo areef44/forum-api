@@ -21,7 +21,7 @@ describe('CreateThread entities', () => {
         };
 
         // Action and Assert
-        expect(() => new CreateThread(payload).toThrowError('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'));
+        expect(() => new CreateThread(payload)).toThrowError('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
     it('should throw error when title contains more than 50 character', () => {

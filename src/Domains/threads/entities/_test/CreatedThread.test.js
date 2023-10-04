@@ -21,7 +21,7 @@ describe('CreatedThread entities', () => {
         };
 
         // Action & Assert
-        expect(() => new CreatedThread(payload).toThrowError('CREATED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'));
+        expect(() => new CreatedThread(payload)).toThrowError('CREATED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
     it('should create new thread object correctly', () => {
