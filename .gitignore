@@ -2,3 +2,5 @@ node_modules
 coverage
 .env
 config
+forum-api-webserver.pem
+package-lock.json
