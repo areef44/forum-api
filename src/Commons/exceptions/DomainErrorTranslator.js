@@ -28,6 +28,8 @@ DomainErrorTranslator._directories = {
     'CREATED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat komentar baru karena tipe data tidak sesuai'),
     'CREATE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membalas komentar karena properti yang dibutuhkan tidak ada'),
     'CREATE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membalas komentar karena tipe data tidak sesuai'),
+    'CREATE_LIKE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat like baru karena properti yang dibutuhkan tidak ada'),
+    'CREATE_LIKE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat like baru karena tipe data tidak sesuai'),
 };
 
 module.exports = DomainErrorTranslator;
