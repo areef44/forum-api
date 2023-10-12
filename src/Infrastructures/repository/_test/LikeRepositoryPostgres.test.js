@@ -6,13 +6,13 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
 
 describe('Like Repository Postgres', () => {
-    afterEach( async () => {
+    afterEach(async () => {
         await UsersTableTestHelper.cleanTable();
         await ThreadsTableTestHelper.cleanTable();
         await CommentsTableTestHelper.cleanTable();
         await LikesTableTestHelper.cleanTable();
       });
-    
+
       afterAll(async () => {
         await pool.end();
       });
@@ -21,7 +21,7 @@ describe('Like Repository Postgres', () => {
         it('should persist create like correctly', async () => {
           // Arrange
           await UsersTableTestHelper.addUser({ id: 'user-123' });
-          
+
           await ThreadsTableTestHelper.createThread({ id: 'thread-123' });
           await CommentsTableTestHelper.createComment({ id: 'comment-123' });
           const payload = {
@@ -30,10 +30,10 @@ describe('Like Repository Postgres', () => {
           };
           const fakeIdGenerator = () => '123'; // stub!
           const likeRepositoryPostgres = new LikeRepositoryPostgres(pool, fakeIdGenerator);
-    
+
           // Action
           await likeRepositoryPostgres.createLike(payload.commentId, payload.owner);
-    
+
           // Assert
           const likes = await LikesTableTestHelper.findLikesByCommentIdAndOwner(payload.commentId, payload.owner);
           expect(likes).toHaveLength(1);
@@ -50,22 +50,22 @@ describe('Like Repository Postgres', () => {
           await CommentsTableTestHelper.createComment({ id: commentId });
           await LikesTableTestHelper.createLike({ commentId, owner: userId });
           const likeRepositoryPostgres = new LikeRepositoryPostgres(pool, {});
-    
+
           // Action
           const isLikeExist = await likeRepositoryPostgres.verifyLikeIsExist(commentId, userId);
-    
+
           // Assert
           expect(isLikeExist).toBeDefined();
           expect(isLikeExist).toStrictEqual(true);
         });
-    
+
         it('should return false if like does not exist with the provided commentId and owner', async () => {
           // Arrange
           const likeRepositoryPostgres = new LikeRepositoryPostgres(pool, {});
-    
+
           // Action
           const isLikeExist = await likeRepositoryPostgres.verifyLikeIsExist('comment-123', 'user-123');
-    
+
           // Assert
           expect(isLikeExist).toBeDefined();
           expect(isLikeExist).toStrictEqual(false);
@@ -83,10 +83,10 @@ describe('Like Repository Postgres', () => {
           await LikesTableTestHelper.createLike({ commentId, owner: userId });
           const fakeIdGenerator = () => '123'; // stub!
           const likeRepositoryPostgres = new LikeRepositoryPostgres(pool, fakeIdGenerator);
-    
+
           // Action
           await likeRepositoryPostgres.deleteLike(commentId, userId);
-    
+
           // Assert
           const likes = await LikesTableTestHelper.findLikesByCommentIdAndOwner(commentId, userId);
           expect(likes).toHaveLength(0);
@@ -104,10 +104,10 @@ describe('Like Repository Postgres', () => {
           await LikesTableTestHelper.createLike({ commentId, owner: userId });
           const fakeIdGenerator = () => '123'; // stub!
           const likeRepositoryPostgres = new LikeRepositoryPostgres(pool, fakeIdGenerator);
-    
+
           // Action
           const likeCount = await likeRepositoryPostgres.getLikeCount(commentId);
-    
+
           // Assert
           expect(likeCount).toBeDefined();
           expect(likeCount).toEqual(1);

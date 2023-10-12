@@ -11,28 +11,28 @@ describe('Create and Delete Like Use Case', () => {
           commentId: 'comment-123',
           owner: 'user-123',
         };
-    
+
         /** creating dependency of use case */
         const mockThreadRepository = new ThreadRepository();
         const mockCommentRepository = new CommentRepository();
         const mockLikeRepository = new LikeRepository();
-    
+
         /** mocking needed function */
         mockThreadRepository.checkAvailabilityThread = jest.fn().mockImplementation(() => Promise.resolve());
         mockCommentRepository.checkAvailabilityComment = jest.fn().mockImplementation(() => Promise.resolve());
         mockLikeRepository.verifyLikeIsExist = jest.fn().mockImplementation(() => Promise.resolve(false)); // like does not exist
         mockLikeRepository.createLike = jest.fn().mockImplementation(() => Promise.resolve());
-    
+
         /** creating use case instance */
         const createDeleteLikeUseCase = new CreateDeleteLikeUseCase({
           threadRepository: mockThreadRepository,
           commentRepository: mockCommentRepository,
           likeRepository: mockLikeRepository,
         });
-    
+
         // Action
         await createDeleteLikeUseCase.execute(useCasePayload);
-    
+
         // Assert
         expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(useCasePayload.threadId);
         expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.commentId);
@@ -49,12 +49,12 @@ describe('Create and Delete Like Use Case', () => {
           commentId: 'comment-123',
           owner: 'user-123',
         };
-    
+
         /** creating dependency of use case */
         const mockThreadRepository = new ThreadRepository();
         const mockCommentRepository = new CommentRepository();
         const mockLikeRepository = new LikeRepository();
-    
+
         /** mocking needed function */
         mockThreadRepository.checkAvailabilityThread = jest.fn()
           .mockImplementation(() => Promise.resolve());
@@ -64,17 +64,17 @@ describe('Create and Delete Like Use Case', () => {
           .mockImplementation(() => Promise.resolve(true)); // like already exist
         mockLikeRepository.deleteLike = jest.fn()
           .mockImplementation(() => Promise.resolve());
-    
+
         /** creating use case instance */
         const createDeleteLikeUseCase = new CreateDeleteLikeUseCase({
           threadRepository: mockThreadRepository,
           commentRepository: mockCommentRepository,
           likeRepository: mockLikeRepository,
         });
-    
+
         // Action
         await createDeleteLikeUseCase.execute(useCasePayload);
-    
+
         // Assert
         expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(useCasePayload.threadId);
         expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.commentId);

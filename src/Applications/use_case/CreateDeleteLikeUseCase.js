@@ -4,7 +4,7 @@ class CreateDeleteLikeUseCase {
       this._commentRepository = commentRepository;
       this._likeRepository = likeRepository;
     }
-  
+
     async execute(useCasePayload) {
       await this._threadRepository.checkAvailabilityThread(useCasePayload.threadId);
       await this._commentRepository.checkAvailabilityComment(useCasePayload.commentId);
@@ -17,5 +17,5 @@ class CreateDeleteLikeUseCase {
       }
     }
   }
-  
-  module.exports = CreateDeleteLikeUseCase;
+
+module.exports = CreateDeleteLikeUseCase;

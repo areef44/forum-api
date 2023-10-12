@@ -3,8 +3,9 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const LikesTableTestHelper = {
   async createLike({
-    id = 'like-123', 
-    owner = 'user-123', commentId = 'comment-123',
+    id = 'like-123',
+    owner = 'user-123',
+    commentId = 'comment-123',
   }) {
     const query = {
       text: `INSERT INTO likes 

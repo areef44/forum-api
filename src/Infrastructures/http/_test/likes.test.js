@@ -24,10 +24,10 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
             // Arrange
             const accessToken = await ServerTestHelper.getAccessToken();
             const server = await createServer(container);
-      
+
             const threadId = 'thread-321';
             const commentId = 'comment-500';
-      
+
             // Action
             const response = await server.inject({
               method: 'PUT',
@@ -36,7 +36,7 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
                 Authorization: `Bearer ${accessToken}`,
               },
             });
-      
+
             // Assert
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(404);
@@ -48,13 +48,13 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
             // Arrange
             const accessToken = await ServerTestHelper.getAccessToken();
             const server = await createServer(container);
-      
+
             const threadId = 'thread-123';
             const commentId = 'comment-123';
             await UsersTableTestHelper.addUser({ id: 'user-123' });
             await ThreadsTableTestHelper.createThread({ id: threadId });
             await CommentsTableTestHelper.createComment({ id: commentId, threadId });
-      
+
             // Action
             const response = await server.inject({
               method: 'PUT',
@@ -63,11 +63,11 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
                 Authorization: `Bearer ${accessToken}`,
               },
             });
-      
+
             // Assert
             const responseJson = JSON.parse(response.payload);
             expect(response.statusCode).toEqual(200);
             expect(responseJson.status).toEqual('success');
           });
     });
-})
+});

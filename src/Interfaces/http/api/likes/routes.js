@@ -6,5 +6,5 @@ const routes = (handler) => ([
       options: { auth: 'forumapi_auth' },
     },
   ]);
-  
+
   module.exports = routes;

@@ -12,8 +12,9 @@ class LikesHandler {
     const { threadId, commentId } = request.params;
     const createDeleteLikeUseCase = this._container.getInstance(CreateDeleteLikeUseCase.name);
     await createDeleteLikeUseCase.execute({
-      owner: userId, 
-      threadId, commentId,
+      owner: userId,
+      threadId,
+      commentId,
     });
 
     const response = h.response({ status: 'success' });
